@@ -96,8 +96,17 @@ namespace HoaLua
                             new ValueTuple<int, int>(1, 16),
                             new ValueTuple<int, int>(16, 1)
                         },
-                        0f, 7.5f, 0, 300, 7.5f, 25
+                        0f, 15f, 0, 300, 15f, 175
                     );
+
+                     // --- THÊM THÔNG TIN ALMANAC NGAY SAU KHI ĐĂNG KÝ ---
+                    string plantName = "Hướng Dương Lửa"; // Tên hiển thị
+                    string plantDescription =
+                        "Khi tạo ánh nắng sẽ đồng thời tạo 1 đường lửa của ớt trên cùng 1 hàng.\n" + // Dòng tagline
+                        "Sản lượng nắng: <color=red>25 ánh nắng/15 giây</color>\n" + // Dòng sản lượng (dùng màu đỏ)
+                        "Công thức: <color=red>Hoa Hướng Dương + Ớt</color>\n\n" + // Dòng công thức (dùng màu đỏ) - Thêm \n\n để có dòng trống
+                        "Hướng Dương Lửa cháy hết mình để tạo ra lửa đốt cháy Zombie."; // Phần mô tả lore
+                    CustomCore.AddPlantAlmanacStrings((int)fireSunflowerType, plantName, plantDescription);
                     // Đã điều chỉnh produceInterval về mức tiêu chuẩn
                     // Đã giảm số lượng mặt trời từ 300 xuống 25 (tiêu chuẩn của hướng dương)
                 }
@@ -146,7 +155,7 @@ namespace HoaLua
                     {
                         // Sử dụng các tham số mặc định của CreateFireLine hoặc tùy chỉnh nếu muốn
                         // CreateFireLine(int theFireRow, int damage = 1800, bool fromZombie = false, bool fix = false, bool shake = true)
-                        Board.Instance.CreateFireLine(plantRow, 800, false, false, true); // Giữ damage mặc định, không phải từ zombie, không fix, có rung lắc
+                        Board.Instance.CreateFireLine(plantRow, 1800, false, false, true); // Giữ damage mặc định, không phải từ zombie, không fix, có rung lắc
                     }
                     catch (Exception ex)
                     {
