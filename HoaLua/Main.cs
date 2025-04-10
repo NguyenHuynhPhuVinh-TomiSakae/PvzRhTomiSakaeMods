@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MelonLoader;
 using HarmonyLib;
 using Il2Cpp;
@@ -19,7 +19,7 @@ namespace HoaLua
         // Hoặc bạn có thể giữ OnInitializeMelon nếu cách này không hiệu quả
         public override void OnApplicationStart()
         {
-            MelonLogger.Msg("PvzRhTomiSakaeMods v1.0 - HoaLua đã khởi động!");
+            MelonLogger.Msg("[PvzRhTomiSakaeMods] PvzRhTomiSakaeMods v1.0 - HoaLua đã khởi động!");
             LoadAssetsSync(); // Gọi hàm tải đồng bộ
         }
 
@@ -29,12 +29,10 @@ namespace HoaLua
             string bundlePath = "Mods/TomiSakae_CayTuyChinh/hoalua";
             string fullPath = Path.Combine(MelonEnvironment.GameRootDirectory, bundlePath);
 
-            MelonLogger.Msg($"Checking for AssetBundle at: {fullPath}");
-
             // --- Bước 1: Kiểm tra sự tồn tại của file ---
             if (!File.Exists(fullPath))
             {
-                MelonLogger.Error($"[File Check] AssetBundle file NOT FOUND at: {fullPath}");
+                MelonLogger.Error("[PvzRhTomiSakaeMods] [Kiểm tra File] KHÔNG TÌM THẤY file AssetBundle tại: {0}", fullPath);
                 return; // Dừng lại nếu file không tồn tại
             }
 
@@ -46,7 +44,7 @@ namespace HoaLua
 
                 if (bundle == null)
                 {
-                    MelonLogger.Error($"[Load Check] FAILED to load AssetBundle synchronously from: {fullPath}. File might be corrupted or incompatible.");
+                    MelonLogger.Error("[PvzRhTomiSakaeMods] [Kiểm tra Tải] THẤT BẠI khi tải AssetBundle từ: {0}. File có thể bị hỏng hoặc không tương thích.", fullPath);
                     return; // Dừng lại nếu tải thất bại
                 }
 
@@ -83,31 +81,35 @@ namespace HoaLua
                     }
                 }
 
-                if (prefabObj == null) MelonLogger.Warning("SunflowerPrefab GameObject not found.");
-                if (previewObj == null) MelonLogger.Warning("SunflowerPreview GameObject not found.");
+                if (prefabObj == null) MelonLogger.Warning("[PvzRhTomiSakaeMods] Không tìm thấy GameObject SunflowerPrefab.");
+                if (previewObj == null) MelonLogger.Warning("[PvzRhTomiSakaeMods] Không tìm thấy GameObject SunflowerPreview.");
 
                 // --- Bước 3: Đăng ký (NGAY LẬP TỨC sau khi load) ---
                 if (prefabObj != null && previewObj != null)
                 {
                     // Việc gọi RegisterCustomPlant ở đây sẽ gọi AddFusion ngay lập tức
+                    // Các tham số: plantType, prefab, preview, recipeList, 
+                    // attackInterval, produceInterval, attackDamage, maxHealth, cd, sun
                     CustomCore.RegisterCustomPlant<Producer, LopHoaLua>(
                         (int)fireSunflowerType, prefabObj, previewObj,
                         new List<ValueTuple<int, int>> {
                             new ValueTuple<int, int>(1, 16),
                             new ValueTuple<int, int>(16, 1)
                         },
-                        0f, 3f, 0, 300, 7.5f, 300
+                        0f, 7.5f, 0, 300, 7.5f, 25
                     );
+                    // Đã điều chỉnh produceInterval về mức tiêu chuẩn
+                    // Đã giảm số lượng mặt trời từ 300 xuống 25 (tiêu chuẩn của hướng dương)
                 }
                 else
                 {
-                    MelonLogger.Error("Failed to register custom plant because prefab or preview object was not found.");
+                    MelonLogger.Error("[PvzRhTomiSakaeMods] Không thể đăng ký cây tùy chỉnh vì không tìm thấy prefab hoặc preview.");
                 }
 
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"An error occurred during synchronous asset loading or processing: {ex}");
+                MelonLogger.Error("[PvzRhTomiSakaeMods] Đã xảy ra lỗi trong quá trình tải hoặc xử lý asset: {0}", ex);
             }
             finally
             {
@@ -115,7 +117,6 @@ namespace HoaLua
                 if (bundle != null)
                 {
                     bundle.Unload(false); // false để giữ lại các assets đã load
-                    MelonLogger.Msg("AssetBundle unloaded.");
                 }
             }
         }
@@ -133,7 +134,7 @@ namespace HoaLua
                     // Bước 2: Đảm bảo Board tồn tại
                     if (Board.Instance == null)
                     {
-                        MelonLogger.Warning("FireSunflower Patch: Board.Instance is null, cannot create fire line.");
+                        MelonLogger.Warning("[PvzRhTomiSakaeMods] FireSunflower Patch: Board.Instance là null, không thể tạo dòng lửa.");
                         return;
                     }
 
@@ -149,7 +150,7 @@ namespace HoaLua
                     }
                     catch (Exception ex)
                     {
-                        MelonLogger.Error($"FireSunflower Patch: Error calling Board.CreateFireLine: {ex.Message}\n{ex.StackTrace}");
+                        MelonLogger.Error("[PvzRhTomiSakaeMods] FireSunflower Patch: Lỗi khi gọi Board.CreateFireLine: {0}\n{1}", ex.Message, ex.StackTrace);
                     }
                 }
             }
