@@ -50,7 +50,7 @@ namespace HoaLua
 
                 GameObject prefabObj = null;
                 GameObject previewObj = null;
-                PlantType fireSunflowerType = (PlantType)961;
+                PlantType fireSunflowerType = (PlantType)2031;
 
                 foreach (UnityEngine.Object obj in bundle.LoadAllAssets())
                 {
@@ -129,7 +129,7 @@ namespace HoaLua
             public static void Postfix(Producer __instance)
             {
                 // Bước 1: Kiểm tra xem có phải là FireSunflower không
-                if (__instance != null && __instance.thePlantType == (PlantType)961)
+                if (__instance != null && __instance.thePlantType == (PlantType)2031)
                 {
                     // Bước 2: Đảm bảo Board tồn tại
                     if (Board.Instance == null)
@@ -146,7 +146,7 @@ namespace HoaLua
                     {
                         // Sử dụng các tham số mặc định của CreateFireLine hoặc tùy chỉnh nếu muốn
                         // CreateFireLine(int theFireRow, int damage = 1800, bool fromZombie = false, bool fix = false, bool shake = true)
-                        Board.Instance.CreateFireLine(plantRow, 1800, false, false, true); // Giữ damage mặc định, không phải từ zombie, không fix, có rung lắc
+                        Board.Instance.CreateFireLine(plantRow, 800, false, false, true); // Giữ damage mặc định, không phải từ zombie, không fix, có rung lắc
                     }
                     catch (Exception ex)
                     {
