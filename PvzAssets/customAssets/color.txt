@@ -3,3 +3,5 @@ ice flower: 82
 150 66
 
 fire flower: -108
+-50 5
+-26 70
