@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoaBang", "HoaBang\HoaBang.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoaHaiDauLua", "HoaHaiDauLua\HoaHaiDauLua.csproj", "{EE5F0E8B-F377-42A9-A13D-E6AA472E29C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoaHaiDauBang", "HoaHaiDauBang\HoaHaiDauBang.csproj", "{9DBF36B3-6A87-443D-A5F8-00E5DE322E26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{EE5F0E8B-F377-42A9-A13D-E6AA472E29C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE5F0E8B-F377-42A9-A13D-E6AA472E29C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE5F0E8B-F377-42A9-A13D-E6AA472E29C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBF36B3-6A87-443D-A5F8-00E5DE322E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBF36B3-6A87-443D-A5F8-00E5DE322E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBF36B3-6A87-443D-A5F8-00E5DE322E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBF36B3-6A87-443D-A5F8-00E5DE322E26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
