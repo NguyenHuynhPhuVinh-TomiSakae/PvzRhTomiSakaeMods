@@ -155,7 +155,7 @@ namespace HoaLua
                     {
                         // Sử dụng các tham số mặc định của CreateFireLine hoặc tùy chỉnh nếu muốn
                         // CreateFireLine(int theFireRow, int damage = 1800, bool fromZombie = false, bool fix = false, bool shake = true)
-                        Board.Instance.CreateFireLine(plantRow, 1800, false, false, true); // Giữ damage mặc định, không phải từ zombie, không fix, có rung lắc
+                        Board.Instance.CreateFireLine(plantRow, 900, false, false, true); // Giữ damage mặc định, không phải từ zombie, không fix, có rung lắc
                     }
                     catch (Exception ex)
                     {
