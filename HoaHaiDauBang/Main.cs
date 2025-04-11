@@ -178,6 +178,31 @@ namespace HoaHaiDauBang
                     try
                     {
                         int zombiesCount = 0;
+                        
+                        // Ngẫu nhiên chọn hàng trên hoặc hàng dưới
+                        bool useUpperRow = UnityEngine.Random.value > 0.5f;
+                        int secondRow = -1; // Hàng thứ hai để đóng băng
+                        
+                        // Xác định hàng thứ hai dựa trên lựa chọn ngẫu nhiên
+                        if (useUpperRow && plantRow > 0) {
+                            // Chọn hàng trên
+                            secondRow = plantRow - 1;
+                        }
+                        else if (!useUpperRow && plantRow < totalRows - 1) {
+                            // Chọn hàng dưới
+                            secondRow = plantRow + 1;
+                        }
+                        else {
+                            // Nếu không thể chọn hàng đã định, chọn hàng còn lại
+                            if (plantRow > 0) {
+                                secondRow = plantRow - 1;
+                            }
+                            else if (plantRow < totalRows - 1) {
+                                secondRow = plantRow + 1;
+                            }
+                        }
+
+                        Zombie_SetFreeze_Patch.secondActivatedRow = secondRow; // Lưu lại hàng thứ hai đã chọn
 
                         // Lặp qua tất cả zombie trong zombieArray
                         foreach (Zombie zombie in Board.Instance.zombieArray)
@@ -185,9 +210,9 @@ namespace HoaHaiDauBang
                             if (zombie == null) continue;
 
                             // Xử lý zombie trên hàng hiện tại
-                            if (zombie.theZombieRow == plantRow)
+                            if (zombie.theZombieRow == plantRow || zombie.theZombieRow == secondRow)
                             {
-                                // Đóng băng zombie trên cùng hàng với cây
+                                // Đóng băng zombie trên cùng hàng với cây hoặc hàng thứ hai
                                 zombiesCount++;
 
                                 // Đóng băng zombie trong 10 giây (tăng thời gian đóng băng)
@@ -204,43 +229,6 @@ namespace HoaHaiDauBang
                                     MelonLogger.Warning("[PvzRhTomiSakaeMods] DualIceSunflower: Không thể tạo hiệu ứng băng: {0}", ex.Message);
                                 }
                             }
-                            // Xử lý zombie trên hàng kế tiếp (nếu không phải hàng cuối)
-                            else if (plantRow < totalRows - 1 && zombie.theZombieRow == plantRow + 1)
-                            {
-                                zombiesCount++;
-                                zombie.SetFreeze(10f);
-                                
-                                try
-                                {
-                                    UnityEngine.Vector3 zombiePos = zombie.transform.position;
-                                    Board.Instance.CreateFreeze(zombiePos);
-                                }
-                                catch (Exception ex)
-                                {
-                                    MelonLogger.Warning("[PvzRhTomiSakaeMods] DualIceSunflower: Không thể tạo hiệu ứng băng: {0}", ex.Message);
-                                }
-                            }
-                            // Nếu ở hàng cuối, đóng băng zombie ở hàng trên
-                            else if (plantRow == totalRows - 1 && zombie.theZombieRow == plantRow - 1)
-                            {
-                                zombiesCount++;
-                                zombie.SetFreeze(10f);
-                                
-                                try
-                                {
-                                    UnityEngine.Vector3 zombiePos = zombie.transform.position;
-                                    Board.Instance.CreateFreeze(zombiePos);
-                                }
-                                catch (Exception ex)
-                                {
-                                    MelonLogger.Warning("[PvzRhTomiSakaeMods] DualIceSunflower: Không thể tạo hiệu ứng băng: {0}", ex.Message);
-                                }
-                            }
-                        }
-
-                        if (zombiesCount > 0)
-                        {
-                            MelonLogger.Msg("[PvzRhTomiSakaeMods] DualIceSunflower: Đã đóng băng {0} zombie trên hai hàng.", zombiesCount);
                         }
                     }
                     catch (Exception ex)
@@ -255,6 +243,9 @@ namespace HoaHaiDauBang
         [HarmonyPatch(typeof(Zombie), "SetFreeze")]
         public static class Zombie_SetFreeze_Patch
         {
+            // Biến tĩnh để lưu trữ hàng thứ hai đã chọn
+            public static int secondActivatedRow = -1;
+            
             // Prefix chạy TRƯỚC khi SetFreeze gốc chạy
             // Trả về false để ngăn phương thức gốc chạy
             public static bool Prefix(Zombie __instance, float time)
@@ -265,25 +256,18 @@ namespace HoaHaiDauBang
                     return true; // Cho phép phương thức gốc chạy
                 }
 
-                // Nếu là do Hoa Băng gọi, chỉ cho phép đóng băng zombie trên cùng hàng hoặc hàng kế tiếp
+                // Nếu là do Hoa Băng gọi, chỉ cho phép đóng băng zombie trên các hàng đã chọn
                 int zombieRow = __instance.theZombieRow;
                 int plantRow = IceSunflower_ProduceSun_FreezeZombies_Patch.lastActivatedRow;
-                int totalRows = Board.Instance.rowNum;
-
-                // Cho phép đóng băng zombie trên cùng hàng
+                
+                // Cho phép đóng băng zombie trên cùng hàng với cây
                 if (zombieRow == plantRow)
                 {
                     return true;
                 }
                 
-                // Cho phép đóng băng zombie trên hàng kế tiếp (nếu không phải hàng cuối)
-                if (plantRow < totalRows - 1 && zombieRow == plantRow + 1)
-                {
-                    return true;
-                }
-                
-                // Nếu ở hàng cuối, cho phép đóng băng zombie ở hàng trên
-                if (plantRow == totalRows - 1 && zombieRow == plantRow - 1)
+                // Cho phép đóng băng zombie trên hàng thứ hai đã chọn
+                if (zombieRow == secondActivatedRow)
                 {
                     return true;
                 }

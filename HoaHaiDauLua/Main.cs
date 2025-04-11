@@ -175,13 +175,25 @@ namespace HoaHaiDauLua
                         // Tạo lửa ở hàng hiện tại
                         Board.Instance.CreateFireLine(plantRow, 1800, false, false, true);
                         
-                        // Tạo lửa ở hàng kế tiếp (nếu không phải hàng cuối)
-                        if (plantRow < totalRows - 1) {
+                        // Ngẫu nhiên chọn hàng trên hoặc hàng dưới
+                        bool useUpperRow = UnityEngine.Random.value > 0.5f;
+                        
+                        if (useUpperRow && plantRow > 0) {
+                            // Tạo lửa ở hàng trên
+                            Board.Instance.CreateFireLine(plantRow - 1, 1800, false, false, true);
+                        }
+                        else if (!useUpperRow && plantRow < totalRows - 1) {
+                            // Tạo lửa ở hàng dưới
                             Board.Instance.CreateFireLine(plantRow + 1, 1800, false, false, true);
                         }
-                        // Nếu ở hàng cuối, tạo lửa ở hàng trên
-                        else if (plantRow > 0) {
-                            Board.Instance.CreateFireLine(plantRow - 1, 1800, false, false, true);
+                        else {
+                            // Nếu không thể tạo ở hàng đã chọn (vì đã ở hàng đầu hoặc cuối), tạo ở hàng còn lại
+                            if (plantRow > 0) {
+                                Board.Instance.CreateFireLine(plantRow - 1, 1800, false, false, true);
+                            }
+                            else if (plantRow < totalRows - 1) {
+                                Board.Instance.CreateFireLine(plantRow + 1, 1800, false, false, true);
+                            }
                         }
                     }
                     catch (Exception ex)
