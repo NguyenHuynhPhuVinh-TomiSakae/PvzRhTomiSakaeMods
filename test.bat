@@ -2,7 +2,7 @@
 setlocal
 
 :: Đường dẫn file nguồn
-set "sourceFile=C:\Users\kotor\Documents\PvzRhTomiSakaeMods\HoaHaiDauBang\obj\Debug\net6.0\HoaHaiDauBang.dll"
+set "sourceFile=C:\Users\kotor\Documents\PvzRhTomiSakaeMods\HoaHaiDauLuaBang\obj\Debug\net6.0\HoaHaiDauLuaBang.dll"
 
 :: Đường dẫn thư mục đích1
 set "targetFolder1=C:\Users\kotor\Documents\PvzRhTomiSakaeMods\Mods"
